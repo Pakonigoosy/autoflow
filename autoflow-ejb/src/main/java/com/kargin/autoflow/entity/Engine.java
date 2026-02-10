@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import javax.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -15,8 +16,14 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "engine")
+@NamedQueries({
+    @NamedQuery(name = "Engine.findAll", query = "SELECT e FROM Engine e"),
+    @NamedQuery(name = "Engine.findBySerialNumber", query = "SELECT e FROM Engine e WHERE e.serialNumber = :serialNumber"),
+    @NamedQuery(name = "Engine.findAvailable", query = "SELECT e FROM Engine e WHERE e.car IS NULL")
+})
 public class Engine implements Serializable {
-    
+
+    @Serial
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -102,6 +109,10 @@ public class Engine implements Serializable {
     
     public void setCar(Car car) {
         this.car = car;
+    }
+
+    public boolean hasCar() {
+        return car != null;
     }
     
     @Override

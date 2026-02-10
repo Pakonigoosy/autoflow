@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import javax.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -12,8 +13,14 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "transmission")
+@NamedQueries({
+    @NamedQuery(name = "Transmission.findAll", query = "SELECT t FROM Transmission t"),
+    @NamedQuery(name = "Transmission.findBySerialNumber", query = "SELECT t FROM Transmission t WHERE t.serialNumber = :serialNumber"),
+    @NamedQuery(name = "Transmission.findAvailable", query = "SELECT t FROM Transmission t WHERE t.car IS NULL")
+})
 public class Transmission implements Serializable {
-    
+
+    @Serial
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -71,6 +78,10 @@ public class Transmission implements Serializable {
     
     public void setCar(Car car) {
         this.car = car;
+    }
+
+    public boolean hasCar() {
+        return car != null;
     }
     
     @Override

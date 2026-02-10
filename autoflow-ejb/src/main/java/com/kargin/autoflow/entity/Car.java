@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import javax.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -13,8 +14,13 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "car")
+@NamedQueries({
+    @NamedQuery(name = "Car.findAll", query = "SELECT c FROM Car c"),
+    @NamedQuery(name = "Car.findByVin", query = "SELECT c FROM Car c WHERE c.vin = :vin")
+})
 public class Car implements Serializable {
-    
+
+    @Serial
     private static final long serialVersionUID = 1L;
     
     @Id
