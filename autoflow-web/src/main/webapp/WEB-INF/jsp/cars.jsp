@@ -1,5 +1,5 @@
 <jsp:useBean id="params" scope="request" type="com.kargin.autoflow.dto.PaginationParams"/>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
@@ -103,7 +103,7 @@
     </c:if>
 
     <h2>Собрать автомобиль</h2>
-    <form method="post" action="cars">
+    <form method="post" action="cars" accept-charset="UTF-8">
         <input type="hidden" name="action" value="assemble">
         <div class="form-group">
             <label>Кузов:
@@ -141,7 +141,7 @@
     </form>
 
     <div class="search-form">
-        <form method="get" action="cars">
+        <form method="get" action="cars" accept-charset="UTF-8">
             <label>
                 Поиск:
                 <input type="text" name="search" placeholder="Поиск..." value="${params.search}">
@@ -193,11 +193,11 @@
     </table>
 
     <div class="pagination">
-        <c:if test="${result.hasPreviousPage}">
+        <c:if test="${result.previousPage}">
             <a href="cars?page=${result.currentPage - 1}&search=${params.search}&sortBy=${params.sortBy}&sortOrder=${params.sortOrder}">Предыдущая</a>
         </c:if>
         <span>Страница ${result.currentPage} из ${result.totalPages} (Всего: ${result.totalItems})</span>
-        <c:if test="${result.hasNextPage}">
+        <c:if test="${result.nextPage}">
             <a href="cars?page=${result.currentPage + 1}&search=${params.search}&sortBy=${params.sortBy}&sortOrder=${params.sortOrder}">Следующая</a>
         </c:if>
     </div>

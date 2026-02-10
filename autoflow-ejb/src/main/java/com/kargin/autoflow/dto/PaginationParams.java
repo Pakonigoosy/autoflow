@@ -7,4 +7,23 @@ package com.kargin.autoflow.dto;
  */
 public record PaginationParams(int page, int pageSize, String search, String sortBy, String sortOrder) {
 
+    public String getSearch() {
+        return search;
+    }
+
+    public String getSortBy() {
+        return sortBy;
+    }
+
+    public String getSortOrder() {
+        return sortOrder;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
 }

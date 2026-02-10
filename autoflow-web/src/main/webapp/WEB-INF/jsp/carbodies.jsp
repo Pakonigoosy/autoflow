@@ -1,5 +1,5 @@
 <jsp:useBean id="params" scope="request" type="com.kargin.autoflow.dto.PaginationParams"/>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -29,7 +29,7 @@
         <a href=".">На главную</a>
         
         <h2>Добавить кузов</h2>
-        <form method="post" action="carbodies">
+        <form method="post" action="carbodies" accept-charset="UTF-8">
             <div class="form-group">
                 <label>Тип: <input type="text" name="type" required></label>
             </div>
@@ -46,7 +46,7 @@
         </form>
         
         <div class="search-form">
-            <form method="get" action="carbodies">
+            <form method="get" action="carbodies" accept-charset="UTF-8">
                 <label>
                     Поиск: <input type="text" name="search" placeholder="Поиск..." value="${params.search}">
                 </label>
@@ -90,7 +90,7 @@
                     <td>${item.color}</td>
                     <td>${item.doorCount}</td>
                     <td>${item.vin}</td>
-                    <td>${item.hasCar ? 'Используется' : 'Доступен'}</td>
+                    <td>${item.carLinked ? 'Используется' : 'Доступен'}</td>
                     <td>
                         <a href="carbodies?action=delete&id=${item.id}" class="btn-danger" 
                            onclick="return confirm('Удалить?')">Удалить</a>
@@ -100,11 +100,11 @@
         </table>
         
         <div class="pagination">
-            <c:if test="${result.hasPreviousPage}">
+            <c:if test="${result.previousPage}">
                 <a href="carbodies?page=${result.currentPage - 1}&search=${params.search}&sortBy=${params.sortBy}&sortOrder=${params.sortOrder}">Предыдущая</a>
             </c:if>
             <span>Страница ${result.currentPage} из ${result.totalPages} (Всего: ${result.totalItems})</span>
-            <c:if test="${result.hasNextPage}">
+            <c:if test="${result.nextPage}">
                 <a href="carbodies?page=${result.currentPage + 1}&search=${params.search}&sortBy=${params.sortBy}&sortOrder=${params.sortOrder}">Следующая</a>
             </c:if>
         </div>

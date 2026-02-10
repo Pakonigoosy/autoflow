@@ -1,5 +1,5 @@
 <jsp:useBean id="params" scope="request" type="com.kargin.autoflow.dto.PaginationParams"/>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -92,7 +92,7 @@
     <a href=".">На главную</a>
 
     <h2>Добавить двигатель</h2>
-    <form method="post" action="engines">
+    <form method="post" action="engines" accept-charset="UTF-8">
         <input type="hidden" name="action" value="create">
         <div class="form-group">
             <label>Тип:
@@ -118,7 +118,7 @@
     </form>
 
     <div class="search-form">
-        <form method="get" action="engines">
+        <form method="get" action="engines" accept-charset="UTF-8">
             <label>
                 Поиск:
                 <input type="text" name="search" placeholder="Поиск..." value="${params.search}">
@@ -162,7 +162,7 @@
                 <td>${item.volume}</td>
                 <td>${item.powerKw}</td>
                 <td>${item.serialNumber}</td>
-                <td>${item.hasCar ? 'Используется' : 'Доступен'}</td>
+                <td>${item.carLinked ? 'Используется' : 'Доступен'}</td>
                 <td>
                     <a href="engines?action=delete&id=${item.id}" class="btn-danger"
                        onclick="return confirm('Удалить?')">Удалить</a>
@@ -172,11 +172,11 @@
     </table>
 
     <div class="pagination">
-        <c:if test="${result.hasPreviousPage}">
+        <c:if test="${result.previousPage}">
             <a href="engines?page=${result.currentPage - 1}&search=${params.search}&sortBy=${params.sortBy}&sortOrder=${params.sortOrder}">Предыдущая</a>
         </c:if>
         <span>Страница ${result.currentPage} из ${result.totalPages} (Всего: ${result.totalItems})</span>
-        <c:if test="${result.hasNextPage}">
+        <c:if test="${result.nextPage}">
             <a href="engines?page=${result.currentPage + 1}&search=${params.search}&sortBy=${params.sortBy}&sortOrder=${params.sortOrder}">Следующая</a>
         </c:if>
     </div>

@@ -48,7 +48,7 @@ public class TransmissionService {
             throw new ComponentNotFoundException("Трансмиссия с ID " + transmission.getId() + " не найдена");
         }
 
-        if (existing.hasCar()) {
+        if (existing.isCarLinked()) {
             throw new ComponentInUseException("Трансмиссия уже используется в автомобиле и не может быть изменена");
         }
         
@@ -67,7 +67,7 @@ public class TransmissionService {
             throw new ComponentNotFoundException("Трансмиссия с ID " + id + " не найдена");
         }
 
-        if (transmission.hasCar()) {
+        if (transmission.isCarLinked()) {
             throw new ComponentInUseException("Трансмиссия используется в автомобиле и не может быть удалена. Сначала разберите автомобиль.");
         }
         

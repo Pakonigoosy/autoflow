@@ -48,7 +48,7 @@ public class EngineService {
             throw new ComponentNotFoundException("Двигатель с ID " + engine.getId() + " не найден");
         }
 
-        if (existing.hasCar()) {
+        if (existing.isCarLinked()) {
             throw new ComponentInUseException("Двигатель уже используется в автомобиле и не может быть изменен");
         }
         
@@ -67,7 +67,7 @@ public class EngineService {
             throw new ComponentNotFoundException("Двигатель с ID " + id + " не найден");
         }
 
-        if (engine.hasCar()) {
+        if (engine.isCarLinked()) {
             throw new ComponentInUseException("Двигатель используется в автомобиле и не может быть удален. Сначала разберите автомобиль.");
         }
         

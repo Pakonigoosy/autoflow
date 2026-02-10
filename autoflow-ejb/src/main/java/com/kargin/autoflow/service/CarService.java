@@ -51,13 +51,13 @@ public class CarService {
             checkUniqueVin(car);
         }
 
-        if (car.getBody() != null && car.getBody().hasCar()) {
+        if (car.getBody() != null && car.getBody().isCarLinked()) {
             throw new ComponentInUseException("Кузов уже используется в другом автомобиле");
         }
-        if (car.getEngine() != null && car.getEngine().hasCar()) {
+        if (car.getEngine() != null && car.getEngine().isCarLinked()) {
             throw new ComponentInUseException("Двигатель уже используется в другом автомобиле");
         }
-        if (car.getTransmission() != null && car.getTransmission().hasCar()) {
+        if (car.getTransmission() != null && car.getTransmission().isCarLinked()) {
             throw new ComponentInUseException("Трансмиссия уже используется в другом автомобиле");
         }
         
@@ -97,13 +97,13 @@ public class CarService {
             checkUniqueVin(car);
         }
 
-        if (car.getBody() != null && !car.getBody().equals(existing.getBody()) && car.getBody().hasCar()) {
+        if (car.getBody() != null && !car.getBody().equals(existing.getBody()) && car.getBody().isCarLinked()) {
             throw new ComponentInUseException("Кузов уже используется в другом автомобиле");
         }
-        if (car.getEngine() != null && !car.getEngine().equals(existing.getEngine()) && car.getEngine().hasCar()) {
+        if (car.getEngine() != null && !car.getEngine().equals(existing.getEngine()) && car.getEngine().isCarLinked()) {
             throw new ComponentInUseException("Двигатель уже используется в другом автомобиле");
         }
-        if (car.getTransmission() != null && !car.getTransmission().equals(existing.getTransmission()) && car.getTransmission().hasCar()) {
+        if (car.getTransmission() != null && !car.getTransmission().equals(existing.getTransmission()) && car.getTransmission().isCarLinked()) {
             throw new ComponentInUseException("Трансмиссия уже используется в другом автомобиле");
         }
         
@@ -165,13 +165,13 @@ public class CarService {
             throw new ComponentNotFoundException("Трансмиссия с ID " + transmissionId + " не найдена");
         }
 
-        if (body.hasCar()) {
+        if (body.isCarLinked()) {
             throw new ComponentInUseException("Кузов уже используется в другом автомобиле");
         }
-        if (engine.hasCar()) {
+        if (engine.isCarLinked()) {
             throw new ComponentInUseException("Двигатель уже используется в другом автомобиле");
         }
-        if (transmission.hasCar()) {
+        if (transmission.isCarLinked()) {
             throw new ComponentInUseException("Трансмиссия уже используется в другом автомобиле");
         }
 

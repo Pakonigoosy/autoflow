@@ -39,11 +39,11 @@ public class PaginationHelper<T> {
         return totalPages;
     }
 
-    public boolean hasNextPage() {
+    public boolean isNextPage() {
         return currentPage < totalPages;
     }
 
-    public boolean hasPreviousPage() {
+    public boolean isPreviousPage() {
         return currentPage > 1;
     }
 }

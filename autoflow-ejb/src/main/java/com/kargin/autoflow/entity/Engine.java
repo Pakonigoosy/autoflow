@@ -118,7 +118,7 @@ public class Engine implements Serializable {
         this.car = car;
     }
 
-    public boolean hasCar() {
+    public boolean isCarLinked() {
         return car != null;
     }
     

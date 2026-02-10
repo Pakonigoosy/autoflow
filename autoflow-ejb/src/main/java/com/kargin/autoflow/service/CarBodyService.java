@@ -48,7 +48,7 @@ public class CarBodyService {
             throw new ComponentNotFoundException("Кузов с ID " + carBody.getId() + " не найден");
         }
         
-        if (existing.hasCar()) {
+        if (existing.isCarLinked()) {
             throw new ComponentInUseException("Кузов уже используется в автомобиле и не может быть изменен");
         }
         
@@ -67,7 +67,7 @@ public class CarBodyService {
             throw new ComponentNotFoundException("Кузов с ID " + id + " не найден");
         }
         
-        if (carBody.hasCar()) {
+        if (carBody.isCarLinked()) {
             throw new ComponentInUseException("Кузов используется в автомобиле и не может быть удален. Сначала разберите автомобиль.");
         }
         
