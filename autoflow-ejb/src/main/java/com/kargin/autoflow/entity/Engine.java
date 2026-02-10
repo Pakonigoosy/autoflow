@@ -6,6 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -21,6 +25,8 @@ import java.util.Objects;
     @NamedQuery(name = "Engine.findBySerialNumber", query = "SELECT e FROM Engine e WHERE e.serialNumber = :serialNumber"),
     @NamedQuery(name = "Engine.findAvailable", query = "SELECT e FROM Engine e WHERE e.car IS NULL")
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Engine implements Serializable {
 
     @Serial
@@ -51,6 +57,7 @@ public class Engine implements Serializable {
     private String serialNumber;
     
     @OneToOne(mappedBy = "engine", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @XmlTransient
     private Car car;
     
     public Engine() {

@@ -6,6 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -20,6 +24,8 @@ import java.util.Objects;
     @NamedQuery(name = "CarBody.findByVin", query = "SELECT cb FROM CarBody cb WHERE cb.vin = :vin"),
     @NamedQuery(name = "CarBody.findAvailable", query = "SELECT cb FROM CarBody cb WHERE cb.car IS NULL")
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CarBody implements Serializable {
 
     @Serial
@@ -49,6 +55,7 @@ public class CarBody implements Serializable {
     private String vin;
     
     @OneToOne(mappedBy = "body", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @XmlTransient
     private Car car;
     
     public CarBody() {

@@ -4,6 +4,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -18,6 +22,8 @@ import java.util.Objects;
     @NamedQuery(name = "Transmission.findBySerialNumber", query = "SELECT t FROM Transmission t WHERE t.serialNumber = :serialNumber"),
     @NamedQuery(name = "Transmission.findAvailable", query = "SELECT t FROM Transmission t WHERE t.car IS NULL")
 })
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Transmission implements Serializable {
 
     @Serial
@@ -38,6 +44,7 @@ public class Transmission implements Serializable {
     private String serialNumber;
     
     @OneToOne(mappedBy = "transmission", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @XmlTransient
     private Car car;
     
     public Transmission() {
