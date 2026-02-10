@@ -6,11 +6,11 @@
              version="7">
     <display-name>AutoFlow EAR</display-name>
     <module>
-        <ejb>autoflow-ejb-1.0-SNAPSHOT.jar</ejb>
+        <ejb>autoflow-ejb.jar</ejb>
     </module>
     <module>
         <web>
-            <web-uri>autoflow-web-1.0-SNAPSHOT.war</web-uri>
+            <web-uri>autoflow-web.war</web-uri>
             <context-root>/autoflow</context-root>
         </web>
     </module>

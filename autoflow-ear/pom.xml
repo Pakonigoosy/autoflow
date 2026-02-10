@@ -36,6 +36,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-ear-plugin</artifactId>
                 <configuration>
+                    <outputFileNameMapping>@{artifactId}@.@{extension}@</outputFileNameMapping>
                     <modules>
                         <ejbModule>
                             <groupId>com.kargin</groupId>
@@ -47,6 +48,18 @@
                             <contextRoot>/autoflow</contextRoot>
                         </webModule>
                     </modules>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <configuration>
+                    <hostname>kargin.tech</hostname>
+                    <port>19990</port>
+                    <username>admin</username>
+                    <password>admin</password>
+                    <filename>${project.build.finalName}.${project.packaging}</filename>
                 </configuration>
             </plugin>
         </plugins>
