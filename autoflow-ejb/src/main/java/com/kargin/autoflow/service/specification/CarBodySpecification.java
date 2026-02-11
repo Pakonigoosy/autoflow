@@ -10,7 +10,13 @@ public class CarBodySpecification extends BaseQuerySpecification<CarBody> {
     }
 
     protected Predicate buildSearchPredicate(Root<CarBody> root, CriteriaBuilder cb, String search) {
-        return cb.like(cb.lower(root.get("name")), "%" + search.toLowerCase() + "%");
+        String searchPattern = "%" + search.toLowerCase() + "%";
+
+        Predicate typePredicate = cb.like(cb.lower(root.get("type")), searchPattern);
+        Predicate colorPredicate = cb.like(cb.lower(root.get("color")), searchPattern);
+        Predicate vinPredicate = cb.like(cb.lower(root.get("vin")), searchPattern);
+
+        return cb.or(typePredicate, colorPredicate, vinPredicate);
     }
 
     protected Path<?> getSortPath(Root<CarBody> root, String sortBy) {

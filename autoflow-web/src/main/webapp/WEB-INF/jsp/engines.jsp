@@ -129,7 +129,7 @@
                     <option value="">Сортировка</option>
                     <option value="type" ${params.sortBy == 'type' ? 'selected' : ''}>Тип</option>
                     <option value="volume" ${params.sortBy == 'volume' ? 'selected' : ''}>Объем</option>
-                    <option value="power" ${params.sortBy == 'power' ? 'selected' : ''}>Мощность</option>
+                    <option value="powerKw" ${params.sortBy == 'powerKw' ? 'selected' : ''}>Мощность</option>
                     <option value="serialNumber" ${params.sortBy == 'serialNumber' ? 'selected' : ''}>Серийный номер</option>
                 </select>
             </label>
@@ -164,8 +164,11 @@
                 <td>${item.serialNumber}</td>
                 <td>${item.carLinked ? 'Используется' : 'Доступен'}</td>
                 <td>
-                    <a href="engines?action=delete&id=${item.id}" class="btn-danger"
-                       onclick="return confirm('Удалить?')">Удалить</a>
+                    <form action="engines" method="post" style="display:inline;">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="id" value="${item.id}">
+                        <button type="submit" onclick="return confirm('Удалить?')">Удалить</button>
+                    </form>
                 </td>
             </tr>
         </c:forEach>

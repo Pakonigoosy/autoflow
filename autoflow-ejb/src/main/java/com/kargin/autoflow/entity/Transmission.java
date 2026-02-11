@@ -20,7 +20,7 @@ import java.util.Objects;
 @NamedQueries({
     @NamedQuery(name = "Transmission.findAll", query = "SELECT t FROM Transmission t"),
     @NamedQuery(name = "Transmission.findBySerialNumber", query = "SELECT t FROM Transmission t WHERE t.serialNumber = :serialNumber"),
-    @NamedQuery(name = "Transmission.findAvailable", query = "SELECT t FROM Transmission t WHERE t.car IS NULL")
+    @NamedQuery(name = "Transmission.findAvailable", query = "SELECT t FROM Transmission t LEFT JOIN t.car c WHERE c.id IS NULL")
 })
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)

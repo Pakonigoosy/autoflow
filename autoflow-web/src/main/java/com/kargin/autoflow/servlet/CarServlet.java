@@ -36,7 +36,7 @@ public class CarServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        
+
         if ("disassemble".equals(action)) {
             String id = request.getParameter("id");
             if (id != null) {
@@ -51,7 +51,7 @@ public class CarServlet extends HttpServlet {
         }
 
         PaginationParams params = PaginationParamsFactory.fromRequest(request);
-        
+
         PaginationHelper<Car> result = carService.findAll(params);
         request.setAttribute("result", result);
         request.setAttribute("params", params);
@@ -59,26 +59,27 @@ public class CarServlet extends HttpServlet {
         request.setAttribute("availableBodies", carBodyService.findAvailable());
         request.setAttribute("availableEngines", engineService.findAvailable());
         request.setAttribute("availableTransmissions", transmissionService.findAvailable());
-        
+        System.out.println(carBodyService.findAvailable());
+        System.out.println(engineService.findAvailable());
+        System.out.println(transmissionService.findAvailable());
+
         request.getRequestDispatcher("/WEB-INF/jsp/cars.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        String action = request.getParameter("action");
-        
-        if ("assemble".equals(action)) {
-            try {
-                Long bodyId = Long.parseLong(request.getParameter("bodyId"));
-                Long engineId = Long.parseLong(request.getParameter("engineId"));
-                Long transmissionId = Long.parseLong(request.getParameter("transmissionId"));
-                carService.assembleCar(bodyId, engineId, transmissionId);
-            } catch (Exception e) {
-                request.setAttribute("error", e.getMessage());
-            }
+        try {
+            Long bodyId = Long.parseLong(request.getParameter("bodyId"));
+            Long engineId = Long.parseLong(request.getParameter("engineId"));
+            Long transmissionId = Long.parseLong(request.getParameter("transmissionId"));
+            carService.assembleCar(bodyId, engineId, transmissionId);
+            System.out.println("Car assembled");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            request.setAttribute("error", e.getMessage());
         }
-        
+
         response.sendRedirect("cars");
     }
 }

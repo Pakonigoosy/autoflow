@@ -46,4 +46,9 @@ public class CarSpecification extends BaseQuerySpecification<Car> {
     public Class<Car> getEntityClass() {
         return Car.class;
     }
+
+    @Override
+    protected List<String> getFetchFields() {
+        return List.of("body", "engine", "transmission");
+    }
 }

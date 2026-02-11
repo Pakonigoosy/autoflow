@@ -148,8 +148,11 @@
                 <td>${item.serialNumber}</td>
                 <td>${item.carLinked ? 'Используется' : 'Используется'}</td>
                 <td>
-                    <a href="transmissions?action=delete&id=${item.id}" class="btn-danger"
-                       onclick="return confirm('Удалить?')">Удалить</a>
+                    <form action="transmissions" method="post" style="display:inline;">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="id" value="${item.id}">
+                        <button type="submit" onclick="return confirm('Удалить?')">Удалить</button>
+                    </form>
                 </td>
             </tr>
         </c:forEach>

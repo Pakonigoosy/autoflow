@@ -124,23 +124,8 @@ public class CarService {
         disassembleCar(id);
     }
 
-    /**
-     * Собирает автомобиль из компонентов (без указания VIN)
-     * @param bodyId ID кузова
-     * @param engineId ID двигателя
-     * @param transmissionId ID трансмиссии
-     * @return собранный автомобиль
-     * @throws ComponentNotFoundException если компонент не найден
-     * @throws ComponentInUseException если компонент уже используется
-     */
-    public Car assembleCar(Long bodyId, Long engineId, Long transmissionId)
-            throws ComponentNotFoundException, ComponentInUseException, DuplicateVinException {
-        return assembleCar(null, bodyId, engineId, transmissionId);
-    }
-
-    /**
+        /**
      * Собирает автомобиль из компонентов
-     * @param vin VIN автомобиля (может быть null)
      * @param bodyId ID кузова
      * @param engineId ID двигателя
      * @param transmissionId ID трансмиссии
@@ -149,7 +134,7 @@ public class CarService {
      * @throws ComponentInUseException если компонент уже используется
      * @throws DuplicateVinException если VIN уже существует
      */
-    public Car assembleCar(String vin, Long bodyId, Long engineId, Long transmissionId) 
+    public Car assembleCar(Long bodyId, Long engineId, Long transmissionId)
             throws ComponentNotFoundException, ComponentInUseException, DuplicateVinException {
         CarBody body = carBodyService.findById(bodyId);
         Engine engine = engineService.findById(engineId);
@@ -175,16 +160,7 @@ public class CarService {
             throw new ComponentInUseException("Трансмиссия уже используется в другом автомобиле");
         }
 
-        if (vin != null) {
-            TypedQuery<Car> query = em.createNamedQuery("Car.findByVin", Car.class);
-            query.setParameter("vin", vin);
-            List<Car> existing = query.getResultList();
-            if (!existing.isEmpty()) {
-                throw new DuplicateVinException("Автомобиль с VIN " + vin + " уже существует");
-            }
-        }
-
-        Car car = new Car(vin, body, engine, transmission, new Date());
+        Car car = new Car(body, engine, transmission, new Date());
 
         car.setBody(body);
         car.setEngine(engine);

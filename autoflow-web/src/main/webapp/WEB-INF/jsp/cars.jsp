@@ -97,19 +97,17 @@
     <h1>Управление автомобилями</h1>
     <a href=".">На главную</a>
 
-    <jsp:useBean id="error" scope="request" type="java.lang.String"/>
-    <c:if test="${not empty error}">
-        <div class="error">Ошибка: ${error}</div>
+    <c:if test="${not empty requestScope.error}">
+        <div class="error">Ошибка: ${requestScope.error}</div>
     </c:if>
 
     <h2>Собрать автомобиль</h2>
     <form method="post" action="cars" accept-charset="UTF-8">
-        <input type="hidden" name="action" value="assemble">
         <div class="form-group">
             <label>Кузов:
                 <select name="bodyId" required>
                     <option value="">Выберите кузов</option>
-                    <c:forEach var="body" items="${param.availableBodies}">
+                    <c:forEach var="body" items="${requestScope.availableBodies}">
                         <option value="${body.id}">${body.type} - ${body.color} (VIN: ${body.vin})</option>
                     </c:forEach>
                 </select>
@@ -119,8 +117,8 @@
             <label>Двигатель:
                 <select name="engineId" required>
                     <option value="">Выберите двигатель</option>
-                    <c:forEach var="engine" items="${param.availableEngines}">
-                        <option value="${engine.id}">${engine.type} - ${engine.power} кВт (SN: ${engine.serialNumber})
+                    <c:forEach var="engine" items="${requestScope.availableEngines}">
+                        <option value="${engine.id}">${engine.type} - ${engine.powerKw} кВт (SN: ${engine.serialNumber})
                         </option>
                     </c:forEach>
                 </select>
@@ -130,7 +128,7 @@
             <label>Трансмиссия:
                 <select name="transmissionId" required>
                     <option value="">Выберите трансмиссию</option>
-                    <c:forEach var="transmission" items="${param.availableTransmissions}">
+                    <c:forEach var="transmission" items="${requestScope.availableTransmissions}">
                         <option value="${transmission.id}">${transmission.type} (SN: ${transmission.serialNumber})
                         </option>
                     </c:forEach>
@@ -180,7 +178,7 @@
         <c:forEach var="car" items="${result.items}">
             <tr>
                 <td>${car.id}</td>
-                <td>${car.body.type} - ${car.body.color} (VIN: ${car.body.vin})</td>
+                <td>${car.body.type} - ${car.body.color} </td>
                 <td>${car.engine.type} - ${car.engine.powerKw} кВт (SN: ${car.engine.serialNumber})</td>
                 <td>${car.transmission.type} (SN: ${car.transmission.serialNumber})</td>
                 <td><fmt:formatDate value="${car.assembledDate}" pattern="yyyy-MM-dd HH:mm"/></td>

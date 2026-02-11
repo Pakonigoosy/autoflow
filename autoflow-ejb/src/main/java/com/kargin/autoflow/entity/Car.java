@@ -11,6 +11,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Сущность автомобиля
@@ -19,7 +20,7 @@ import java.util.Objects;
 @Table(name = "car")
 @NamedQueries({
     @NamedQuery(name = "Car.findAll", query = "SELECT c FROM Car c"),
-    @NamedQuery(name = "Car.findByVin", query = "SELECT c FROM Car c WHERE c.vin = :vin")
+    @NamedQuery(name = "Car.findByVin", query = "SELECT c FROM Car c LEFT JOIN c.body b WHERE b.vin = :vin")
 })
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -31,11 +32,6 @@ public class Car implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @NotBlank(message = "VIN автомобиля не может быть пустым")
-    @Size(max = 17, message = "VIN не может быть длиннее 17 символов")
-    @Column(name = "vin", nullable = false, length = 17, unique = true)
-    private String vin;
     
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "body_id", unique = true)
@@ -56,8 +52,7 @@ public class Car implements Serializable {
     public Car() {
     }
     
-    public Car(String vin, CarBody body, Engine engine, Transmission transmission, Date assembledDate) {
-        this.vin = vin;
+    public Car(CarBody body, Engine engine, Transmission transmission, Date assembledDate) {
         this.body = body;
         this.engine = engine;
         this.transmission = transmission;
@@ -73,11 +68,13 @@ public class Car implements Serializable {
     }
     
     public String getVin() {
-        return vin;
+        return Optional.of(getBody()).map(CarBody::getVin).orElse(null);
     }
     
     public void setVin(String vin) {
-        this.vin = vin;
+        if (this.body != null) {
+            this.body.setVin(vin);
+        }
     }
     
     public CarBody getBody() {
@@ -149,7 +146,7 @@ public class Car implements Serializable {
     public String toString() {
         return "Car{" +
                 "id=" + id +
-                ", vin='" + vin + '\'' +
+                ", vin='" + getVin() + '\'' +
                 ", assembledDate=" + assembledDate +
                 '}';
     }

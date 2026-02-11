@@ -22,7 +22,7 @@ import java.util.Objects;
 @NamedQueries({
     @NamedQuery(name = "CarBody.findAll", query = "SELECT cb FROM CarBody cb"),
     @NamedQuery(name = "CarBody.findByVin", query = "SELECT cb FROM CarBody cb WHERE cb.vin = :vin"),
-    @NamedQuery(name = "CarBody.findAvailable", query = "SELECT cb FROM CarBody cb WHERE cb.car IS NULL")
+    @NamedQuery(name = "CarBody.findAvailable", query = "SELECT cb FROM CarBody cb LEFT JOIN cb.car c WHERE c.id IS NULL")
 })
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -49,9 +49,10 @@ public class CarBody implements Serializable {
     @Min(value = 2, message = "Количество дверей должно быть не менее 2")
     @Column(name = "door_count", nullable = false)
     private Integer doorCount;
-    
+
+    @NotBlank(message = "VIN не может быть пустым")
     @Size(max = 17, message = "VIN не может быть длиннее 17 символов")
-    @Column(name = "vin", length = 17, unique = true)
+    @Column(name = "vin", nullable = false, length = 17, unique = true)
     private String vin;
     
     @OneToOne(mappedBy = "body", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

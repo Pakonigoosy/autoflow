@@ -38,6 +38,18 @@ public class CarBodyServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        request.setCharacterEncoding("UTF-8");
+        String method = request.getParameter("_method");
+        if (method != null) {
+            if ("DELETE".equalsIgnoreCase(method)) {
+                doDelete(request, response);
+                return;
+            }
+            if ("PUT".equalsIgnoreCase(method)) {
+                doPut(request, response);
+                return;
+            }
+        }
         CarBody carBody = new CarBody();
         carBody.setType(request.getParameter("type"));
         carBody.setColor(request.getParameter("color"));
@@ -65,6 +77,7 @@ public class CarBodyServlet extends HttpServlet {
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
         }
+        response.sendRedirect("carbodies");
     }
 
     @Override
@@ -85,5 +98,6 @@ public class CarBodyServlet extends HttpServlet {
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
         }
+        response.sendRedirect("carbodies");
     }
 }

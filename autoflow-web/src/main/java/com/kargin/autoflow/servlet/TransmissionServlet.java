@@ -38,6 +38,18 @@ public class TransmissionServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        request.setCharacterEncoding("UTF-8");
+        String method = request.getParameter("_method");
+        if (method != null) {
+            if ("DELETE".equalsIgnoreCase(method)) {
+                doDelete(request, response);
+                return;
+            }
+            if ("PUT".equalsIgnoreCase(method)) {
+                doPut(request, response);
+                return;
+            }
+        }
         Transmission transmission = new Transmission();
         transmission.setType(request.getParameter("type"));
         transmission.setSerialNumber(request.getParameter("serialNumber"));
@@ -63,6 +75,7 @@ public class TransmissionServlet extends HttpServlet {
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
         }
+        response.sendRedirect("transmissions");
     }
 
     @Override
@@ -81,5 +94,6 @@ public class TransmissionServlet extends HttpServlet {
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
         }
+        response.sendRedirect("transmissions");
     }
 }

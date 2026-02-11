@@ -1,6 +1,8 @@
 package com.kargin.autoflow.service.specification;
 
 import javax.persistence.criteria.*;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class BaseQuerySpecification<T> implements QuerySpecification<T> {
     protected final String search;
@@ -17,9 +19,17 @@ public abstract class BaseQuerySpecification<T> implements QuerySpecification<T>
 
     protected abstract Path<?> getSortPath(Root<T> root, String sortBy);
 
+    protected List<String> getFetchFields() {
+        return Collections.emptyList();
+    }
+
     public CriteriaQuery<T> buildQuery(CriteriaBuilder cb, Root<T> root) {
         CriteriaQuery<T> query = cb.createQuery(getEntityClass());
         root = query.from(getEntityClass());
+
+        for (String field : getFetchFields()) {
+            root.fetch(field, JoinType.LEFT);
+        }
 
         query.select(root);
 
