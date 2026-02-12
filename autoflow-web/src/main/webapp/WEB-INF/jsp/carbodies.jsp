@@ -1,3 +1,4 @@
+<%@ page import="com.kargin.autoflow.entity.CarBody" %>
 <jsp:useBean id="params" scope="request" type="com.kargin.autoflow.dto.PaginationParams"/>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -29,18 +30,40 @@
         <a href=".">На главную</a>
         
         <h2>Добавить кузов</h2>
+        <%
+            CarBody savedCarBody = (CarBody) request.getAttribute("carBody");
+            String error = (String) request.getAttribute("error");
+        %>
+        <% if (error != null) { %>
+            <div class="error-message" style="color: red; margin-bottom: 15px;">
+                <%= error %>
+            </div>
+        <% } %>
+
         <form method="post" action="carbodies" accept-charset="UTF-8">
             <div class="form-group">
-                <label>Тип: <input type="text" name="type" required></label>
+                <label>Тип:
+                    <input type="text" name="type" required
+                           value="<%= savedCarBody != null ? savedCarBody.getType() : "" %>">
+                </label>
             </div>
             <div class="form-group">
-                <label>Цвет: <input type="text" name="color" required></label>
+                <label>Цвет:
+                    <input type="text" name="color" required
+                           value="<%= savedCarBody != null ? savedCarBody.getColor() : "" %>">
+                </label>
             </div>
             <div class="form-group">
-                <label>Кол-во дверей: <input type="number" name="doorCount" required></label>
+                <label>Кол-во дверей:
+                    <input type="number" name="doorCount" required
+                           value="<%= savedCarBody != null ? savedCarBody.getDoorCount() : "" %>">
+                </label>
             </div>
             <div class="form-group">
-                <label>VIN: <input type="text" name="vin" required></label>
+                <label>VIN:
+                    <input type="text" name="vin" required
+                           value="<%= savedCarBody != null ? savedCarBody.getVin() : "" %>">
+                </label>
             </div>
             <button type="submit" class="btn-primary">Создать</button>
         </form>

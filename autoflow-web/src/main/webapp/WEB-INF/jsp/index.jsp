@@ -49,10 +49,6 @@
             <li><a href="engines">Управление двигателями</a></li>
             <li><a href="transmissions">Управление трансмиссиями</a></li>
             <li><a href="cars">Управление автомобилями</a></li>
-            <li><a href="api/carbodies">REST API - Кузова (JSON)</a></li>
-            <li><a href="api/engines">REST API - Двигатели (JSON)</a></li>
-            <li><a href="api/transmissions">REST API - Трансмиссии (JSON)</a></li>
-            <li><a href="api/cars">REST API - Автомобили (JSON)</a></li>
         </ul>
     </div>
 </body>

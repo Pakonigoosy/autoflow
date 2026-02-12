@@ -4,6 +4,7 @@ import com.kargin.autoflow.dto.PaginationParams;
 import com.kargin.autoflow.entity.CarBody;
 import com.kargin.autoflow.exception.ComponentInUseException;
 import com.kargin.autoflow.exception.ComponentNotFoundException;
+import com.kargin.autoflow.exception.DuplicateVinException;
 import com.kargin.autoflow.service.specification.CarBodySpecification;
 import com.kargin.autoflow.service.specification.QuerySpecification;
 import com.kargin.autoflow.util.PaginationHelper;
@@ -29,7 +30,10 @@ public class CarBodyService {
      * @param carBody кузов для создания
      * @return созданный кузов
      */
-    public CarBody create(CarBody carBody) {
+    public CarBody create(CarBody carBody) throws DuplicateVinException {
+        if (findByVin(carBody.getVin()) != null) {
+            throw new DuplicateVinException("Кузов с VIN " + carBody.getVin() + " уже существует");
+        }
         em.persist(carBody);
         em.flush();
         return carBody;
