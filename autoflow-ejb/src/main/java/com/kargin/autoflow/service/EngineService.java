@@ -4,6 +4,7 @@ import com.kargin.autoflow.dto.PaginationParams;
 import com.kargin.autoflow.entity.Engine;
 import com.kargin.autoflow.exception.ComponentInUseException;
 import com.kargin.autoflow.exception.ComponentNotFoundException;
+import com.kargin.autoflow.exception.DuplicateException;
 import com.kargin.autoflow.service.specification.QuerySpecification;
 import com.kargin.autoflow.service.specification.TypeSerialSpecification;
 import com.kargin.autoflow.util.PaginationHelper;
@@ -29,7 +30,10 @@ public class EngineService {
      * @param engine двигатель для создания
      * @return созданный двигатель
      */
-    public Engine create(Engine engine) {
+    public Engine create(Engine engine) throws DuplicateException {
+        if (findBySerialNumber(engine.getSerialNumber()) != null) {
+            throw new DuplicateException("Двигатель с номером " + engine.getSerialNumber() + " уже существует");
+        }
         em.persist(engine);
         em.flush();
         return engine;
@@ -46,10 +50,6 @@ public class EngineService {
         Engine existing = em.find(Engine.class, engine.getId());
         if (existing == null) {
             throw new ComponentNotFoundException("Двигатель с ID " + engine.getId() + " не найден");
-        }
-
-        if (existing.isCarLinked()) {
-            throw new ComponentInUseException("Двигатель уже используется в автомобиле и не может быть изменен");
         }
         
         return em.merge(engine);

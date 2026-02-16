@@ -1,4 +1,3 @@
-<%@ page import="com.kargin.autoflow.entity.CarBody" %>
 <jsp:useBean id="params" scope="request" type="com.kargin.autoflow.dto.PaginationParams"/>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -13,12 +12,8 @@
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background-color: #007bff; color: white; }
-        .form-group { margin: 10px 0; }
-        label { display: inline-block; width: 120px; }
-        input, select { padding: 5px; width: 200px; }
         button { padding: 8px 15px; margin: 5px; cursor: pointer; }
         .btn-primary { background-color: #007bff; color: white; border: none; }
-        .btn-danger { background-color: #dc3545; color: white; border: none; }
         .pagination { margin-top: 20px; }
         .pagination a { padding: 5px 10px; margin: 0 2px; text-decoration: none; border: 1px solid #ddd; }
         .search-form { margin: 20px 0; }
@@ -28,46 +23,8 @@
     <div class="container">
         <h1>Управление кузовами</h1>
         <a href=".">На главную</a>
-        
-        <h2>Добавить кузов</h2>
-        <%
-            CarBody savedCarBody = (CarBody) request.getAttribute("carBody");
-            String error = (String) request.getAttribute("error");
-        %>
-        <% if (error != null) { %>
-            <div class="error-message" style="color: red; margin-bottom: 15px;">
-                <%= error %>
-            </div>
-        <% } %>
+        <p><a href="carbodies/form" class="btn-primary">Добавить кузов</a></p>
 
-        <form method="post" action="carbodies" accept-charset="UTF-8">
-            <div class="form-group">
-                <label>Тип:
-                    <input type="text" name="type" required
-                           value="<%= savedCarBody != null ? savedCarBody.getType() : "" %>">
-                </label>
-            </div>
-            <div class="form-group">
-                <label>Цвет:
-                    <input type="text" name="color" required
-                           value="<%= savedCarBody != null ? savedCarBody.getColor() : "" %>">
-                </label>
-            </div>
-            <div class="form-group">
-                <label>Кол-во дверей:
-                    <input type="number" name="doorCount" required
-                           value="<%= savedCarBody != null ? savedCarBody.getDoorCount() : "" %>">
-                </label>
-            </div>
-            <div class="form-group">
-                <label>VIN:
-                    <input type="text" name="vin" required
-                           value="<%= savedCarBody != null ? savedCarBody.getVin() : "" %>">
-                </label>
-            </div>
-            <button type="submit" class="btn-primary">Создать</button>
-        </form>
-        
         <div class="search-form">
             <form method="get" action="carbodies" accept-charset="UTF-8">
                 <label>
@@ -115,6 +72,7 @@
                     <td>${item.vin}</td>
                     <td>${item.carLinked ? 'Используется' : 'Доступен'}</td>
                     <td>
+                        <a href="carbodies/form?id=${item.id}${not empty requestScope.queryString ? '&' : ''}${requestScope.queryString}" class="btn-primary">Редактировать</a>
                         <form action="carbodies" method="post" style="display:inline;">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="hidden" name="id" value="${item.id}">

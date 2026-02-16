@@ -38,10 +38,6 @@
             color: white;
         }
 
-        .form-group {
-            margin: 10px 0;
-        }
-
         label {
             display: inline-block;
             width: 150px;
@@ -60,12 +56,6 @@
 
         .btn-primary {
             background-color: #007bff;
-            color: white;
-            border: none;
-        }
-
-        .btn-danger {
-            background-color: #dc3545;
             color: white;
             border: none;
         }
@@ -90,32 +80,7 @@
 <div class="container">
     <h1>Управление двигателями</h1>
     <a href=".">На главную</a>
-
-    <h2>Добавить двигатель</h2>
-    <form method="post" action="engines" accept-charset="UTF-8">
-        <input type="hidden" name="action" value="create">
-        <div class="form-group">
-            <label>Тип:
-                <input type="text" name="type" required>
-            </label>
-        </div>
-        <div class="form-group">
-            <label>Объем (л):
-                <input type="number" step="0.1" name="volume" required>
-            </label>
-        </div>
-        <div class="form-group">
-            <label>Мощность (кВт):
-                <input type="number" step="0.1" name="power" required>
-            </label>
-        </div>
-        <div class="form-group">
-            <label>Серийный номер:
-                <input type="text" name="serialNumber" required>
-            </label>
-        </div>
-        <button type="submit" class="btn-primary">Создать</button>
-    </form>
+    <p><a href="engines/form" class="btn-primary">Добавить двигатель</a></p>
 
     <div class="search-form">
         <form method="get" action="engines" accept-charset="UTF-8">
@@ -164,6 +129,7 @@
                 <td>${item.serialNumber}</td>
                 <td>${item.carLinked ? 'Используется' : 'Доступен'}</td>
                 <td>
+                    <a href="engines/form?id=${item.id}${not empty requestScope.queryString ? '&' : ''}${requestScope.queryString}" class="btn-primary">Редактировать</a>
                     <form action="engines" method="post" style="display:inline;">
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="id" value="${item.id}">

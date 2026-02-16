@@ -38,10 +38,6 @@
             color: white;
         }
 
-        .form-group {
-            margin: 10px 0;
-        }
-
         label {
             display: inline-block;
             width: 150px;
@@ -60,12 +56,6 @@
 
         .btn-primary {
             background-color: #007bff;
-            color: white;
-            border: none;
-        }
-
-        .btn-danger {
-            background-color: #dc3545;
             color: white;
             border: none;
         }
@@ -90,22 +80,7 @@
 <div class="container">
     <h1>Управление трансмиссиями</h1>
     <a href=".">На главную</a>
-
-    <h2>Добавить трансмиссию</h2>
-    <form method="post" action="transmissions" accept-charset="UTF-8">
-        <input type="hidden" name="action" value="create">
-        <div class="form-group">
-            <label>Тип:
-                <input type="text" name="type" required>
-            </label>
-        </div>
-        <div class="form-group">
-            <label>Серийный номер:
-                <input type="text" name="serialNumber" required>
-            </label>
-        </div>
-        <button type="submit" class="btn-primary">Создать</button>
-    </form>
+    <p><a href="transmissions/form" class="btn-primary">Добавить трансмиссию</a></p>
 
     <div class="search-form">
         <form method="get" action="transmissions" accept-charset="UTF-8">
@@ -146,8 +121,9 @@
                 <td>${item.id}</td>
                 <td>${item.type}</td>
                 <td>${item.serialNumber}</td>
-                <td>${item.carLinked ? 'Используется' : 'Используется'}</td>
+                <td>${item.carLinked ? 'Используется' : 'Доступен'}</td>
                 <td>
+                    <a href="transmissions/form?id=${item.id}${not empty requestScope.queryString ? '&' : ''}${requestScope.queryString}" class="btn-primary">Редактировать</a>
                     <form action="transmissions" method="post" style="display:inline;">
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="id" value="${item.id}">

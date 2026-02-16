@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigDecimal;
 
 @WebServlet("/engines")
 public class EngineServlet extends HttpServlet {
@@ -32,6 +31,7 @@ public class EngineServlet extends HttpServlet {
         PaginationHelper<Engine> result = engineService.findAll(params);
         request.setAttribute("result", result);
         request.setAttribute("params", params);
+        request.setAttribute("queryString", request.getQueryString());
 
         request.getRequestDispatcher("/WEB-INF/jsp/engines.jsp").forward(request, response);
     }
@@ -41,23 +41,10 @@ public class EngineServlet extends HttpServlet {
             throws IOException {
         request.setCharacterEncoding("UTF-8");
         String method = request.getParameter("_method");
-        if (method != null) {
-            if ("DELETE".equalsIgnoreCase(method)) {
-                doDelete(request, response);
-                return;
-            }
-            if ("PUT".equalsIgnoreCase(method)) {
-                doPut(request, response);
-                return;
-            }
+        if ("DELETE".equalsIgnoreCase(method)) {
+            doDelete(request, response);
+            return;
         }
-        Engine engine = new Engine();
-        engine.setType(request.getParameter("type"));
-        engine.setVolume(BigDecimal.valueOf(Double.parseDouble(request.getParameter("volume"))));
-        engine.setPowerKw(BigDecimal.valueOf(Double.parseDouble(request.getParameter("power"))));
-        engine.setSerialNumber(request.getParameter("serialNumber"));
-        engineService.create(engine);
-
         response.sendRedirect("engines");
     }
 
@@ -81,24 +68,4 @@ public class EngineServlet extends HttpServlet {
         response.sendRedirect("engines");
     }
 
-    @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-        Engine engine = new Engine();
-        engine.setId(Long.parseLong(request.getParameter("id")));
-        engine.setType(request.getParameter("type"));
-        engine.setVolume(BigDecimal.valueOf(Double.parseDouble(request.getParameter("volume"))));
-        engine.setPowerKw(BigDecimal.valueOf(Double.parseDouble(request.getParameter("power"))));
-        engine.setSerialNumber(request.getParameter("serialNumber"));
-        try {
-            engineService.update(engine);
-        } catch (ComponentNotFoundException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Engine not found");
-        } catch (ComponentInUseException e) {
-            response.sendError(HttpServletResponse.SC_CONFLICT, "Engine in use");
-        } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
-        }
-        response.sendRedirect("engines");
-    }
 }

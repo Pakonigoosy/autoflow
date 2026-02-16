@@ -8,7 +8,7 @@ import com.kargin.autoflow.entity.Transmission;
 import com.kargin.autoflow.exception.CarNotFoundException;
 import com.kargin.autoflow.exception.ComponentInUseException;
 import com.kargin.autoflow.exception.ComponentNotFoundException;
-import com.kargin.autoflow.exception.DuplicateVinException;
+import com.kargin.autoflow.exception.DuplicateException;
 import com.kargin.autoflow.service.specification.CarSpecification;
 import com.kargin.autoflow.service.specification.QuerySpecification;
 import com.kargin.autoflow.util.PaginationHelper;
@@ -43,10 +43,10 @@ public class CarService {
      * Создает новый автомобиль
      * @param car автомобиль для создания
      * @return созданный автомобиль
-     * @throws DuplicateVinException если VIN уже существует
+     * @throws DuplicateException если VIN уже существует
      * @throws ComponentInUseException если компоненты уже используются
      */
-    public Car create(Car car) throws DuplicateVinException, ComponentInUseException {
+    public Car create(Car car) throws DuplicateException, ComponentInUseException {
         if (car.getVin() != null) {
             checkUniqueVin(car);
         }
@@ -70,12 +70,12 @@ public class CarService {
         return car;
     }
 
-    private void checkUniqueVin(Car car) throws DuplicateVinException {
+    private void checkUniqueVin(Car car) throws DuplicateException {
         TypedQuery<Car> query = em.createNamedQuery("Car.findByVin", Car.class);
         query.setParameter("vin", car.getVin());
         List<Car> existing = query.getResultList();
         if (!existing.isEmpty()) {
-            throw new DuplicateVinException("Автомобиль с VIN " + car.getVin() + " уже существует");
+            throw new DuplicateException("Автомобиль с VIN " + car.getVin() + " уже существует");
         }
     }
 
@@ -84,10 +84,10 @@ public class CarService {
      * @param car автомобиль для обновления
      * @return обновленный автомобиль
      * @throws CarNotFoundException если автомобиль не найден
-     * @throws DuplicateVinException если VIN уже существует
+     * @throws DuplicateException если VIN уже существует
      * @throws ComponentInUseException если компоненты уже используются
      */
-    public Car update(Car car) throws CarNotFoundException, DuplicateVinException, ComponentInUseException {
+    public Car update(Car car) throws CarNotFoundException, DuplicateException, ComponentInUseException {
         Car existing = em.find(Car.class, car.getId());
         if (existing == null) {
             throw new CarNotFoundException("Автомобиль с ID " + car.getId() + " не найден");
@@ -132,10 +132,10 @@ public class CarService {
      * @return собранный автомобиль
      * @throws ComponentNotFoundException если компонент не найден
      * @throws ComponentInUseException если компонент уже используется
-     * @throws DuplicateVinException если VIN уже существует
+     * @throws DuplicateException если VIN уже существует
      */
     public Car assembleCar(Long bodyId, Long engineId, Long transmissionId)
-            throws ComponentNotFoundException, ComponentInUseException, DuplicateVinException {
+            throws ComponentNotFoundException, ComponentInUseException, DuplicateException {
         CarBody body = carBodyService.findById(bodyId);
         Engine engine = engineService.findById(engineId);
         Transmission transmission = transmissionService.findById(transmissionId);

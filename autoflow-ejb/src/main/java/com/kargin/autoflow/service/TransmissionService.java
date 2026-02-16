@@ -4,6 +4,7 @@ import com.kargin.autoflow.dto.PaginationParams;
 import com.kargin.autoflow.entity.Transmission;
 import com.kargin.autoflow.exception.ComponentInUseException;
 import com.kargin.autoflow.exception.ComponentNotFoundException;
+import com.kargin.autoflow.exception.DuplicateException;
 import com.kargin.autoflow.service.specification.QuerySpecification;
 import com.kargin.autoflow.service.specification.TypeSerialSpecification;
 import com.kargin.autoflow.util.PaginationHelper;
@@ -29,7 +30,10 @@ public class TransmissionService {
      * @param transmission трансмиссия для создания
      * @return созданная трансмиссия
      */
-    public Transmission create(Transmission transmission) {
+    public Transmission create(Transmission transmission) throws DuplicateException {
+        if (findBySerialNumber(transmission.getSerialNumber()) != null) {
+            throw new DuplicateException("Трансмиссия с номером " + transmission.getSerialNumber() + " уже существует");
+        }
         em.persist(transmission);
         em.flush();
         return transmission;
@@ -46,10 +50,6 @@ public class TransmissionService {
         Transmission existing = em.find(Transmission.class, transmission.getId());
         if (existing == null) {
             throw new ComponentNotFoundException("Трансмиссия с ID " + transmission.getId() + " не найдена");
-        }
-
-        if (existing.isCarLinked()) {
-            throw new ComponentInUseException("Трансмиссия уже используется в автомобиле и не может быть изменена");
         }
         
         return em.merge(transmission);

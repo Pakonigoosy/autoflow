@@ -31,6 +31,7 @@ public class TransmissionServlet extends HttpServlet {
         PaginationHelper<Transmission> result = transmissionService.findAll(params);
         request.setAttribute("result", result);
         request.setAttribute("params", params);
+        request.setAttribute("queryString", request.getQueryString());
 
         request.getRequestDispatcher("/WEB-INF/jsp/transmissions.jsp").forward(request, response);
     }
@@ -40,21 +41,10 @@ public class TransmissionServlet extends HttpServlet {
             throws IOException {
         request.setCharacterEncoding("UTF-8");
         String method = request.getParameter("_method");
-        if (method != null) {
-            if ("DELETE".equalsIgnoreCase(method)) {
-                doDelete(request, response);
-                return;
-            }
-            if ("PUT".equalsIgnoreCase(method)) {
-                doPut(request, response);
-                return;
-            }
+        if ("DELETE".equalsIgnoreCase(method)) {
+            doDelete(request, response);
+            return;
         }
-        Transmission transmission = new Transmission();
-        transmission.setType(request.getParameter("type"));
-        transmission.setSerialNumber(request.getParameter("serialNumber"));
-        transmissionService.create(transmission);
-
         response.sendRedirect("transmissions");
     }
 
@@ -78,22 +68,4 @@ public class TransmissionServlet extends HttpServlet {
         response.sendRedirect("transmissions");
     }
 
-    @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-        Transmission transmission = new Transmission();
-        transmission.setId(Long.parseLong(request.getParameter("id")));
-        transmission.setType(request.getParameter("type"));
-        transmission.setSerialNumber(request.getParameter("serialNumber"));
-        try {
-            transmissionService.update(transmission);
-        } catch (ComponentNotFoundException e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Transmission not found");
-        } catch (ComponentInUseException e) {
-            response.sendError(HttpServletResponse.SC_CONFLICT, "Transmission in use");
-        } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
-        }
-        response.sendRedirect("transmissions");
-    }
 }

@@ -4,7 +4,7 @@ import com.kargin.autoflow.dto.PaginationParams;
 import com.kargin.autoflow.entity.CarBody;
 import com.kargin.autoflow.exception.ComponentInUseException;
 import com.kargin.autoflow.exception.ComponentNotFoundException;
-import com.kargin.autoflow.exception.DuplicateVinException;
+import com.kargin.autoflow.exception.DuplicateException;
 import com.kargin.autoflow.service.specification.CarBodySpecification;
 import com.kargin.autoflow.service.specification.QuerySpecification;
 import com.kargin.autoflow.util.PaginationHelper;
@@ -30,9 +30,9 @@ public class CarBodyService {
      * @param carBody кузов для создания
      * @return созданный кузов
      */
-    public CarBody create(CarBody carBody) throws DuplicateVinException {
+    public CarBody create(CarBody carBody) throws DuplicateException {
         if (findByVin(carBody.getVin()) != null) {
-            throw new DuplicateVinException("Кузов с VIN " + carBody.getVin() + " уже существует");
+            throw new DuplicateException("Кузов с VIN " + carBody.getVin() + " уже существует");
         }
         em.persist(carBody);
         em.flush();
@@ -69,10 +69,6 @@ public class CarBodyService {
         CarBody carBody = em.find(CarBody.class, id);
         if (carBody == null) {
             throw new ComponentNotFoundException("Кузов с ID " + id + " не найден");
-        }
-        
-        if (carBody.isCarLinked()) {
-            throw new ComponentInUseException("Кузов используется в автомобиле и не может быть удален. Сначала разберите автомобиль.");
         }
         
         em.remove(carBody);

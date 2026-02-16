@@ -39,10 +39,6 @@
             color: white;
         }
 
-        .form-group {
-            margin: 10px 0;
-        }
-
         label {
             display: inline-block;
             width: 150px;
@@ -101,42 +97,7 @@
         <div class="error">Ошибка: ${requestScope.error}</div>
     </c:if>
 
-    <h2>Собрать автомобиль</h2>
-    <form method="post" action="cars" accept-charset="UTF-8">
-        <div class="form-group">
-            <label>Кузов:
-                <select name="bodyId" required>
-                    <option value="">Выберите кузов</option>
-                    <c:forEach var="body" items="${requestScope.availableBodies}">
-                        <option value="${body.id}">${body.type} - ${body.color} (VIN: ${body.vin})</option>
-                    </c:forEach>
-                </select>
-            </label>
-        </div>
-        <div class="form-group">
-            <label>Двигатель:
-                <select name="engineId" required>
-                    <option value="">Выберите двигатель</option>
-                    <c:forEach var="engine" items="${requestScope.availableEngines}">
-                        <option value="${engine.id}">${engine.type} - ${engine.powerKw} кВт (SN: ${engine.serialNumber})
-                        </option>
-                    </c:forEach>
-                </select>
-            </label>
-        </div>
-        <div class="form-group">
-            <label>Трансмиссия:
-                <select name="transmissionId" required>
-                    <option value="">Выберите трансмиссию</option>
-                    <c:forEach var="transmission" items="${requestScope.availableTransmissions}">
-                        <option value="${transmission.id}">${transmission.type} (SN: ${transmission.serialNumber})
-                        </option>
-                    </c:forEach>
-                </select>
-            </label>
-        </div>
-        <button type="submit" class="btn-success">Собрать автомобиль</button>
-    </form>
+    <p><a href="cars/form" class="btn-success">Собрать автомобиль</a></p>
 
     <div class="search-form">
         <form method="get" action="cars" accept-charset="UTF-8">
@@ -148,7 +109,7 @@
                 Сортировка:
                 <select name="sortBy">
                     <option value="">Сортировка</option>
-                    <option value="assemblyDate" ${params.sortBy == 'assemblyDate' ? 'selected' : ''}>Дата сборки
+                    <option value="assembledDate" ${params.sortBy == 'assembledDate' ? 'selected' : ''}>Дата сборки
                     </option>
                 </select>
             </label>

@@ -2,10 +2,7 @@ package com.kargin.autoflow.servlet;
 
 import com.kargin.autoflow.dto.PaginationParams;
 import com.kargin.autoflow.entity.Car;
-import com.kargin.autoflow.service.CarBodyService;
 import com.kargin.autoflow.service.CarService;
-import com.kargin.autoflow.service.EngineService;
-import com.kargin.autoflow.service.TransmissionService;
 import com.kargin.autoflow.util.PaginationHelper;
 import com.kargin.autoflow.util.PaginationParamsFactory;
 
@@ -22,15 +19,6 @@ public class CarServlet extends HttpServlet {
 
     @EJB
     private CarService carService;
-
-    @EJB
-    private CarBodyService carBodyService;
-
-    @EJB
-    private EngineService engineService;
-
-    @EJB
-    private TransmissionService transmissionService;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -55,31 +43,9 @@ public class CarServlet extends HttpServlet {
         PaginationHelper<Car> result = carService.findAll(params);
         request.setAttribute("result", result);
         request.setAttribute("params", params);
-
-        request.setAttribute("availableBodies", carBodyService.findAvailable());
-        request.setAttribute("availableEngines", engineService.findAvailable());
-        request.setAttribute("availableTransmissions", transmissionService.findAvailable());
-        System.out.println(carBodyService.findAvailable());
-        System.out.println(engineService.findAvailable());
-        System.out.println(transmissionService.findAvailable());
+        request.setAttribute("queryString", request.getQueryString());
 
         request.getRequestDispatcher("/WEB-INF/jsp/cars.jsp").forward(request, response);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-        try {
-            Long bodyId = Long.parseLong(request.getParameter("bodyId"));
-            Long engineId = Long.parseLong(request.getParameter("engineId"));
-            Long transmissionId = Long.parseLong(request.getParameter("transmissionId"));
-            carService.assembleCar(bodyId, engineId, transmissionId);
-            System.out.println("Car assembled");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            request.setAttribute("error", e.getMessage());
-        }
-
-        response.sendRedirect("cars");
-    }
 }
