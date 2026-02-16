@@ -3,6 +3,8 @@ package com.kargin.autoflow.rest;
 import com.kargin.autoflow.dto.PaginationParams;
 import com.kargin.autoflow.entity.Transmission;
 import com.kargin.autoflow.rest.dto.PaginatedResponse;
+import com.kargin.autoflow.rest.dto.RestDtoMapper;
+import com.kargin.autoflow.rest.dto.TransmissionDto;
 import com.kargin.autoflow.service.TransmissionService;
 
 import javax.ejb.EJB;
@@ -20,10 +22,11 @@ public class TransmissionResource {
     private TransmissionService transmissionService;
 
     @POST
-    public Response create(Transmission transmission) {
+    public Response create(TransmissionDto dto) {
         try {
-            Transmission created = transmissionService.create(transmission);
-            return Response.status(Response.Status.CREATED).entity(created).build();
+            Transmission entity = RestDtoMapper.toTransmission(dto);
+            Transmission created = transmissionService.create(entity);
+            return Response.status(Response.Status.CREATED).entity(RestDtoMapper.toDto(created)).build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -31,11 +34,12 @@ public class TransmissionResource {
 
     @PUT
     @Path("/{id}")
-    public Response update(@PathParam("id") Long id, Transmission transmission) {
+    public Response update(@PathParam("id") Long id, TransmissionDto dto) {
         try {
-            transmission.setId(id);
-            Transmission updated = transmissionService.update(transmission);
-            return Response.ok(updated).build();
+            dto.setId(id);
+            Transmission entity = RestDtoMapper.toTransmission(dto);
+            Transmission updated = transmissionService.update(entity);
+            return Response.ok(RestDtoMapper.toDto(updated)).build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -59,7 +63,7 @@ public class TransmissionResource {
         if (transmission == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(transmission).build();
+        return Response.ok(RestDtoMapper.toDto(transmission)).build();
     }
 
     @GET
@@ -70,13 +74,13 @@ public class TransmissionResource {
             @QueryParam("sortBy") String sortBy,
             @QueryParam("sortOrder") @DefaultValue("asc") String sortOrder) {
         PaginationParams params = new PaginationParams(page, pageSize, search, sortBy, sortOrder);
-        return Response.ok(PaginatedResponse.from(transmissionService.findAll(params))).build();
+        return Response.ok(PaginatedResponse.from(transmissionService.findAll(params), RestDtoMapper::toDto)).build();
     }
 
     @GET
     @Path("/available")
     public Response findAvailable() {
         List<Transmission> available = transmissionService.findAvailable();
-        return Response.ok(available).build();
+        return Response.ok(RestDtoMapper.toTransmissionDtoList(available)).build();
     }
 }

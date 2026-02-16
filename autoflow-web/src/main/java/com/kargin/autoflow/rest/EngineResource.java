@@ -2,7 +2,9 @@ package com.kargin.autoflow.rest;
 
 import com.kargin.autoflow.dto.PaginationParams;
 import com.kargin.autoflow.entity.Engine;
+import com.kargin.autoflow.rest.dto.EngineDto;
 import com.kargin.autoflow.rest.dto.PaginatedResponse;
+import com.kargin.autoflow.rest.dto.RestDtoMapper;
 import com.kargin.autoflow.service.EngineService;
 
 import javax.ejb.EJB;
@@ -20,10 +22,11 @@ public class EngineResource {
     private EngineService engineService;
 
     @POST
-    public Response create(Engine engine) {
+    public Response create(EngineDto dto) {
         try {
-            Engine created = engineService.create(engine);
-            return Response.status(Response.Status.CREATED).entity(created).build();
+            Engine entity = RestDtoMapper.toEngine(dto);
+            Engine created = engineService.create(entity);
+            return Response.status(Response.Status.CREATED).entity(RestDtoMapper.toDto(created)).build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -31,11 +34,12 @@ public class EngineResource {
 
     @PUT
     @Path("/{id}")
-    public Response update(@PathParam("id") Long id, Engine engine) {
+    public Response update(@PathParam("id") Long id, EngineDto dto) {
         try {
-            engine.setId(id);
-            Engine updated = engineService.update(engine);
-            return Response.ok(updated).build();
+            dto.setId(id);
+            Engine entity = RestDtoMapper.toEngine(dto);
+            Engine updated = engineService.update(entity);
+            return Response.ok(RestDtoMapper.toDto(updated)).build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -59,7 +63,7 @@ public class EngineResource {
         if (engine == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(engine).build();
+        return Response.ok(RestDtoMapper.toDto(engine)).build();
     }
 
     @GET
@@ -70,13 +74,13 @@ public class EngineResource {
             @QueryParam("sortBy") String sortBy,
             @QueryParam("sortOrder") @DefaultValue("asc") String sortOrder) {
         PaginationParams params = new PaginationParams(page, pageSize, search, sortBy, sortOrder);
-        return Response.ok(PaginatedResponse.from(engineService.findAll(params))).build();
+        return Response.ok(PaginatedResponse.from(engineService.findAll(params), RestDtoMapper::toDto)).build();
     }
 
     @GET
     @Path("/available")
     public Response findAvailable() {
         List<Engine> available = engineService.findAvailable();
-        return Response.ok(available).build();
+        return Response.ok(RestDtoMapper.toEngineDtoList(available)).build();
     }
 }

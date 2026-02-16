@@ -1,23 +1,22 @@
 package com.kargin.autoflow.rest.dto;
 
-import com.kargin.autoflow.entity.Car;
-import com.kargin.autoflow.entity.CarBody;
-import com.kargin.autoflow.entity.Engine;
-import com.kargin.autoflow.entity.Transmission;
 import com.kargin.autoflow.util.PaginationHelper;
 
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * DTO пагинированного ответа для REST API.
  * Совместим с JAXB и Jackson: конструктор по умолчанию и сеттеры.
  * Создаётся из результата сервисного слоя {@link PaginationHelper}.
+ * Для ответов используйте DTO, а не сущности — во избежание циклической сериализации.
  */
 @XmlRootElement(name = "paginatedResponse")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlSeeAlso({CarBody.class, Car.class, Engine.class, Transmission.class})
+@XmlSeeAlso({CarBodyDto.class, CarDto.class, EngineDto.class, TransmissionDto.class})
 public class PaginatedResponse<T> {
 
     @XmlElementWrapper(name = "items")
@@ -34,9 +33,13 @@ public class PaginatedResponse<T> {
     public PaginatedResponse() {
     }
 
-    public static <T> PaginatedResponse<T> from(PaginationHelper<T> helper) {
-        PaginatedResponse<T> dto = new PaginatedResponse<>();
-        dto.setItems(helper.getItems());
+    /**
+     * Создаёт пагинированный ответ с преобразованием элементов сущностей в DTO.
+     * Используйте для REST, чтобы избежать циклической сериализации (например Entity → DTO).
+     */
+    public static <E, D> PaginatedResponse<D> from(PaginationHelper<E> helper, Function<E, D> mapper) {
+        PaginatedResponse<D> dto = new PaginatedResponse<>();
+        dto.setItems(helper.getItems().stream().map(mapper).collect(Collectors.toList()));
         dto.setCurrentPage(helper.getCurrentPage());
         dto.setPageSize(helper.getPageSize());
         dto.setTotalItems(helper.getTotalItems());

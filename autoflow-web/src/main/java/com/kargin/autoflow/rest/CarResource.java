@@ -3,6 +3,7 @@ package com.kargin.autoflow.rest;
 import com.kargin.autoflow.dto.PaginationParams;
 import com.kargin.autoflow.entity.Car;
 import com.kargin.autoflow.rest.dto.PaginatedResponse;
+import com.kargin.autoflow.rest.dto.RestDtoMapper;
 import com.kargin.autoflow.service.CarService;
 
 import javax.ejb.EJB;
@@ -28,7 +29,7 @@ public class CarResource {
             @QueryParam("transmissionId") Long transmissionId) {
         try {
             Car car = carService.assembleCar(bodyId, engineId, transmissionId);
-            return Response.status(Response.Status.CREATED).entity(car).build();
+            return Response.status(Response.Status.CREATED).entity(RestDtoMapper.toDto(car)).build();
         } catch (Exception e) {
             Map<String, String> error = new HashMap<>();
             error.put("error", e.getMessage());
@@ -44,7 +45,7 @@ public class CarResource {
             Long engineId = components.get("engineId");
             Long transmissionId = components.get("transmissionId");
             Car car = carService.assembleCar(bodyId, engineId, transmissionId);
-            return Response.status(Response.Status.CREATED).entity(car).build();
+            return Response.status(Response.Status.CREATED).entity(RestDtoMapper.toDto(car)).build();
         } catch (Exception e) {
             Map<String, String> error = new HashMap<>();
             error.put("error", e.getMessage());
@@ -72,7 +73,7 @@ public class CarResource {
         if (car == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(car).build();
+        return Response.ok(RestDtoMapper.toDto(car)).build();
     }
 
     @GET
@@ -83,6 +84,6 @@ public class CarResource {
             @QueryParam("sortBy") String sortBy,
             @QueryParam("sortOrder") @DefaultValue("asc") String sortOrder) {
         PaginationParams params = new PaginationParams(page, pageSize, search, sortBy, sortOrder);
-        return Response.ok(PaginatedResponse.from(carService.findAll(params))).build();
+        return Response.ok(PaginatedResponse.from(carService.findAll(params), RestDtoMapper::toDto)).build();
     }
 }
