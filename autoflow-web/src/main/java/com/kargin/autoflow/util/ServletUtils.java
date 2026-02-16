@@ -8,7 +8,7 @@ public final class ServletUtils {
     }
 
     /**
-     * Собирает query string для редиректа на список (page, search, sortBy, sortOrder).
+     * Собирает query string для редиректа на список.
      * Возвращает строку без ведущего "?" или пустую строку.
      */
     public static String buildListQueryString(HttpServletRequest request) {

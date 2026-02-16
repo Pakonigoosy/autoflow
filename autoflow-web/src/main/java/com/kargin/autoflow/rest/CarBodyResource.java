@@ -2,8 +2,8 @@ package com.kargin.autoflow.rest;
 
 import com.kargin.autoflow.dto.PaginationParams;
 import com.kargin.autoflow.entity.CarBody;
+import com.kargin.autoflow.rest.dto.PaginatedResponse;
 import com.kargin.autoflow.service.CarBodyService;
-import com.kargin.autoflow.util.PaginationHelper;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -70,8 +70,7 @@ public class CarBodyResource {
             @QueryParam("sortBy") String sortBy,
             @QueryParam("sortOrder") @DefaultValue("asc") String sortOrder) {
         PaginationParams params = new PaginationParams(page, pageSize, search, sortBy, sortOrder);
-        PaginationHelper<CarBody> result = carBodyService.findAll(params);
-        return Response.ok(result).build();
+        return Response.ok(PaginatedResponse.from(carBodyService.findAll(params))).build();
     }
 
     @GET

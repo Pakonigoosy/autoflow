@@ -1,9 +1,12 @@
 package com.kargin.autoflow.util;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
-@XmlRootElement
+/**
+ * Служебный класс сервисного слоя для пагинированных результатов.
+ * Не предназначен для прямой сериализации в REST.
+ * Для REST используйте DTO {@code com.kargin.autoflow.rest.dto.PaginatedResponse}.
+ */
 public class PaginationHelper<T> {
     private final List<T> items;
     private final int currentPage;
