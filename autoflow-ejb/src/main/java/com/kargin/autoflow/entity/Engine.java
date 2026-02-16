@@ -63,13 +63,6 @@ public class Engine implements Serializable {
     public Engine() {
     }
     
-    public Engine(String type, BigDecimal volume, BigDecimal powerKw, String serialNumber) {
-        this.type = type;
-        this.volume = volume;
-        this.powerKw = powerKw;
-        this.serialNumber = serialNumber;
-    }
-    
     public Long getId() {
         return id;
     }

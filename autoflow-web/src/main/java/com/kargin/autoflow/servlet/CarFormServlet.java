@@ -4,6 +4,7 @@ import com.kargin.autoflow.service.CarBodyService;
 import com.kargin.autoflow.service.CarService;
 import com.kargin.autoflow.service.EngineService;
 import com.kargin.autoflow.service.TransmissionService;
+import com.kargin.autoflow.util.ServletUtils;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -46,17 +47,8 @@ public class CarFormServlet extends HttpServlet {
             Long engineId = Long.parseLong(request.getParameter("engineId"));
             Long transmissionId = Long.parseLong(request.getParameter("transmissionId"));
             carService.assembleCar(bodyId, engineId, transmissionId);
-            StringBuilder queryString = new StringBuilder();
-            String page = request.getParameter("page");
-            String search = request.getParameter("search");
-            String sortBy = request.getParameter("sortBy");
-            String sortOrder = request.getParameter("sortOrder");
-            if (page != null && !page.isEmpty()) queryString.append("page=").append(page).append("&");
-            if (search != null && !search.isEmpty()) queryString.append("search=").append(search).append("&");
-            if (sortBy != null && !sortBy.isEmpty()) queryString.append("sortBy=").append(sortBy).append("&");
-            if (sortOrder != null && !sortOrder.isEmpty()) queryString.append("sortOrder=").append(sortOrder).append("&");
-            String cleanedQueryString = queryString.length() > 0 ? queryString.substring(0, queryString.length() - 1) : "";
-            response.sendRedirect("../cars" + (cleanedQueryString.isEmpty() ? "" : "?" + cleanedQueryString));
+            String queryString = ServletUtils.buildListQueryString(request);
+            response.sendRedirect("../cars" + (queryString.isEmpty() ? "" : "?" + queryString));
         } catch (Exception e) {
             request.setAttribute("error", e.getMessage());
             request.setAttribute("availableBodies", carBodyService.findAvailable());
